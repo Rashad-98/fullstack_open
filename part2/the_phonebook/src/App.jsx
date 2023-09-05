@@ -40,15 +40,27 @@ const App = () => {
 
   const addName = (e) => {
     e.preventDefault()
-    for (let i = 0; i < persons.length; i++) {
-      if(persons[i].name === newName) {
-        alert(`${newName} is already added to phonebook`)
-        return
-      }
-    }
     const newPerson = {
       name: newName,
       number: newNumber
+    }
+
+    for (let i = 0; i < persons.length; i++) {
+      if(persons[i].name === newName) {
+        if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+          personsService
+            .change(persons[i].id, newPerson)
+            .then(response => {
+              const personsCopy = [...persons]
+              personsCopy[i] = response.data
+              setPersons(personsCopy)
+              setFilteredPersons(personsCopy)
+            })
+            return
+        } else {
+          return
+        }
+      }
     }
 
     personsService

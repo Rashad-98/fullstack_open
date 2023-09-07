@@ -1,8 +1,8 @@
-const Notification = ({message, timeoutId}) => {
+const Notification = ({message, messageType, setMessageType}) => {
     if(message === null) return null
 
     const inlineStyle = {
-        color: 'green',
+        color: messageType === 'error' ? 'red' : 'green',
         background: 'lightgrey',
         fontSize: 20,
         borderStyle: 'solid',

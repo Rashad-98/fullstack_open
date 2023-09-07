@@ -13,6 +13,7 @@ const App = () => {
   const [filteredPersons, setFilteredPersons] = useState([])
   const [message, setMessage] = useState(null)
   const [timeoutId, setTimeoutId] = useState(null)
+  const [messageType, setMessageType] = useState(null)
 
   useEffect(() => {
     personsService
@@ -67,6 +68,16 @@ const App = () => {
               setNewNumber('')
               setMessage(`Updated ${newName}`)
             })
+            .catch(() => {
+              setMessageType('error')
+              setMessage(`Information of ${newName} has already been removed from server`)
+              personsService
+                .getAll()
+                .then(persons => {
+                  setPersons(persons)
+                  setFilteredPersons(persons)
+                })
+            })
             return
         } else {
           return
@@ -88,7 +99,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={message} setMessage={setMessage}/>
+      <Notification message={message} messageType={messageType} setMessageType={setMessageType}/>
       <Filter searchTerm={searchTerm} handler={handleSearchTerm}/>
       <h3>add a new</h3>
       <PersonForm

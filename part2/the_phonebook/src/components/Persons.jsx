@@ -6,7 +6,9 @@ const Persons = ({persons, setPersons, setFilteredPersons, setMessage, timeoutId
         if(window.confirm(`Delete ${name}?`)) {
             const person = persons.find(person => person.name === name)
             const id = person.id
-            personsService.remove(id)
+            personsService
+                .remove(id)
+                .catch(() => setMessage(`Deleted ${name}`))
             const newPersons = persons.filter(person => person.id !== id)
             setPersons(newPersons)
             setFilteredPersons(newPersons)

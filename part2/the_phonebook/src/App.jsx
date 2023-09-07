@@ -3,6 +3,7 @@ import personsService from './services/persons'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -10,6 +11,8 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
   const [filteredPersons, setFilteredPersons] = useState([])
+  const [message, setMessage] = useState(null)
+  const [timeoutId, setTimeoutId] = useState(null)
 
   useEffect(() => {
     personsService
@@ -45,6 +48,11 @@ const App = () => {
       number: newNumber
     }
 
+    clearTimeout(timeoutId)
+    setTimeoutId(setTimeout(() => {
+      setMessage(null)
+    }, 5000))
+
     for (let i = 0; i < persons.length; i++) {
       if(persons[i].name === newName) {
         if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
@@ -55,6 +63,9 @@ const App = () => {
               personsCopy[i] = response.data
               setPersons(personsCopy)
               setFilteredPersons(personsCopy)
+              setNewName('')
+              setNewNumber('')
+              setMessage(`Updated ${newName}`)
             })
             return
         } else {
@@ -70,12 +81,14 @@ const App = () => {
           setFilteredPersons(persons.concat(createdPerson))
           setNewName('')
           setNewNumber('')
+          setMessage(`Added ${newName}`)
         })
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} setMessage={setMessage}/>
       <Filter searchTerm={searchTerm} handler={handleSearchTerm}/>
       <h3>add a new</h3>
       <PersonForm
@@ -86,7 +99,14 @@ const App = () => {
         numberHandler={handleNumberChange}
       />
       <h3>Numbers</h3>
-      <Persons persons={filteredPersons} setPersons={setPersons} setFilteredPersons={setFilteredPersons}/>
+      <Persons
+        persons={filteredPersons}
+        setPersons={setPersons}
+        setFilteredPersons={setFilteredPersons}
+        setMessage={setMessage}
+        timeoutId={timeoutId}
+        setTimeoutId={setTimeoutId}
+      />
     </div>
   )
 }

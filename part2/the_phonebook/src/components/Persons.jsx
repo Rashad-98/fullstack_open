@@ -1,6 +1,6 @@
 import personsService from '../services/persons'
 
-const Persons = ({persons, setPersons, setFilteredPersons}) => {
+const Persons = ({persons, setPersons, setFilteredPersons, setMessage, timeoutId, setTimeoutId}) => {
     const handleDelete = (e) => {
         const name = e.target.parentElement.firstChild.textContent
         if(window.confirm(`Delete ${name}?`)) {
@@ -10,6 +10,11 @@ const Persons = ({persons, setPersons, setFilteredPersons}) => {
             const newPersons = persons.filter(person => person.id !== id)
             setPersons(newPersons)
             setFilteredPersons(newPersons)
+            setMessage(`Deleted ${name}`)
+            clearTimeout(timeoutId)
+            setTimeoutId(setTimeout(() => {
+                setMessage(null)
+            }, 5000))
         }
     }
 

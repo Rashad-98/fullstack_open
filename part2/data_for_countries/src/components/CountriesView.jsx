@@ -1,17 +1,30 @@
+import { useState, useEffect } from "react"
 import Country from "./Country"
 
 const CountryView = ({countries, searchTerm}) => {
-    if (countries.length === 1) {
-        return <Country country={countries[0]}/>
-    } else if(countries.length <= 3) {
-        const regex = new RegExp(`^${searchTerm}$`, 'i')
-        const filteredCountry = countries.find(country => regex.test(country.name.common))
-        if(filteredCountry !== undefined) return <Country country={filteredCountry}/>
+    const [countriesToShow, setCountriesToShow] = useState([]);
+    
+    useEffect(() => {
+        setCountriesToShow(countries)
+    }, [countries])
+
+    if(countriesToShow.length === 1) {
+        return <Country country={countriesToShow[0]}/>
     }
+
+    const showCountry = (event) => {
+        setCountriesToShow([countries.find(country => country.name.common === event.target.parentElement.id)])
+    }
+
     return (
         <>
-            {countries.map(country => {
-                return <div key={country.name.common}>{country.name.common}</div>
+            {countriesToShow.map(country => {
+                return (
+                    <div key={country.name.common} id={country.name.common}>
+                        <span>{country.name.common} </span>
+                        <button onClick={showCountry}>show</button>
+                    </div>
+                )
             })}
         </>
     )

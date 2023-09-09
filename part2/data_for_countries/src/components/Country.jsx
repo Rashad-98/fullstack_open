@@ -4,10 +4,14 @@ import weatherService from '../services/weather'
 const Country = ({country}) => {
     const [weatherData, setWeatherData] = useState({})
     const [lat, lon] = country.latlng
-    const [imageSource, setImageSource] = useState('')
+    const [image, setImage] = useState({})
     useEffect(() => {
         weatherService.getWeatherData(lat, lon).then(data => {
-            setImageSource(`https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`)
+            const image = {
+                src: `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`,
+                alt: data.weather[0].description
+            }
+            setImage(image)
             setWeatherData(data)
         })
     }, [lat, lon])
@@ -34,7 +38,7 @@ const Country = ({country}) => {
             <div>
                 temperature {weatherData.main ? weatherData.main.temp : '--'} Celcius 
             </div>
-            <img src={imageSource}/> {/*TODO: add alt*/}
+            <img src={image.src} alt={image.alt}/>
             <div>
                 wind {weatherData.main ? weatherData.wind.speed : '--'} m/s
             </div>

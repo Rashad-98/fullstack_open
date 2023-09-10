@@ -1,3 +1,5 @@
+## NOTE: Before launching this app you need to use an api key from Open Waether Map as an environment variable named "REACT_APP_open_weather_map_key"
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

@@ -7,10 +7,10 @@ import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
+  const [filteredPersons, setFilteredPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
-  const [filteredPersons, setFilteredPersons] = useState([])
   const [message, setMessage] = useState(null)
   const [timeoutId, setTimeoutId] = useState(null)
   const [messageType, setMessageType] = useState(null)
@@ -22,6 +22,7 @@ const App = () => {
         setPersons(persons)
         setFilteredPersons(persons)
       })
+      .catch(err => console.error(err.message))
   }, [])
 
   const handleNameChange = (e) => {
